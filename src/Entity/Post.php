@@ -104,7 +104,7 @@ class Post
     {
         $this->content = $content;
     }
-    
+
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->created_at;
