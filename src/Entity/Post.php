@@ -34,6 +34,11 @@ class Post
     private $slug;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $content;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private $created_at;
@@ -84,6 +89,22 @@ class Post
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * @param mixed $content
+     */
+    public function setContent($content): void
+    {
+        $this->content = $content;
+    }
+    
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->created_at;
