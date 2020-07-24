@@ -22,6 +22,34 @@ class PostController extends AbstractController
     }
 
     /**
+     * @Route("/edit/{id}", name="_edit", methods={"GET", "POST"})
+     */
+    public function edit(Request $request, Post $post)
+    {
+        $data = $request->request->all();
+
+        if (empty($data)) {
+            return $this->render(
+                "post/edit.html.twig", [ "post" => $post ]
+            );
+        }
+
+        $post
+            ->setTitle($data["title"])
+            ->setUpdatedAt(new \DateTime("now", new \DateTimeZone("America/Sao_Paulo")))
+            ->setDescription($data["description"])
+            ->setSlug($data["slug"])
+            ->setContent($data["content"])
+        ;
+
+        $doctrine = $this->getDoctrine()->getManager();
+        $doctrine->persist($post);
+        $doctrine->flush();
+
+        return $this->render("post/index.html.twig");
+    }
+
+    /**
      * @Route("/create", name="_create", methods={"GET", "POST"})
      */
     public function create(Request $request): Response
