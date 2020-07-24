@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use JsonSerializable;
 use App\Repository\PostRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -9,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass=PostRepository::class)
  * @ORM\Table(name="posts")
  */
-class Post
+class Post implements JsonSerializable
 {
     /**
      * @ORM\Id()
@@ -127,5 +128,18 @@ class Post
         $this->updated_at = $updated_at;
 
         return $this;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            "id" => $this->getId(),
+            "title" => $this->getTitle(),
+            "description" => $this->getDescription(),
+            "content" => $this->getContent(),
+            "slug" => $this->getSlug(),
+            "createdAt" => $this->getCreatedAt(),
+            "updatedAt" => $this->getUpdatedAt()
+        ];
     }
 }
