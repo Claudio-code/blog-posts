@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    lista do categorias
+{% endblock %}
+
+{% block body %}
+    <div class="mt-3">
+        <a
+                href="{{ path('post_create') }}"
+                class="btn btn-primary"
+        >
+            criar post
+        </a>
+        <hr>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">nome</th>
+                <th scope="col">descrição</th>
+                <th scope="col">slug</th>
+                <th scope="col">criado em</th>
+                <th scope="col">opções</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for category in categories %}
+                <tr>
+                    <td scope="row">{{ category.name }}</td>
+                    <td scope="row">{{ category.description }}</td>
+                    <td scope="row">{{ category.slug }}</td>
+                    <td scope="row">{{ category.createdAt|date('d/m/y H:i:s') }}</td>
+                    <td scope="row">
+                        <a
+                                href="{{ path('category_edit', { 'id': category.id }) }}"
+                                class="btn btn-primary"
+                        >
+                            editar
+                        </a>
+                        <a
+                                href="{{ path('category_remove', { 'id': category.id }) }}"
+                                class="btn btn-danger"
+                        >
+                            remover
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
