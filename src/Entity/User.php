@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class User
 {
     /**
+     * @var int
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -18,16 +19,19 @@ class User
     private $id;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=255)
      */
     private $first_name;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=255)
      */
     private $last_name;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=255)
      */
     private $email;
@@ -41,6 +45,12 @@ class User
      * @ORM\Column(type="datetime")
      */
     private $updated_at;
+
+    /**
+     * @var array
+     * @ORM\ManyToOne(targetEntity="App\Entity\Post")
+     */
+    private $posts;
 
     public function getId(): ?int
     {

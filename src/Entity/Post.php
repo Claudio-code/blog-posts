@@ -49,6 +49,12 @@ class Post implements JsonSerializable
      */
     private $updated_at;
 
+    /**
+     * @var User
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     */
+    private $author;
+
     public function getId(): ?int
     {
         return $this->id;
