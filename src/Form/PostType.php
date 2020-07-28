@@ -17,6 +17,7 @@ class PostType extends AbstractType
             ->add('slug')
             ->add('content')
             ->add('author')
+            ->add('categoryCollection')
         ;
     }
 

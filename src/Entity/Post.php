@@ -196,7 +196,7 @@ class Post implements JsonSerializable
     /**
      * @return User
      */
-    public function getAuthor(): User
+    public function getAuthor(): ?User
     {
         return $this->author;
     }
@@ -214,7 +214,7 @@ class Post implements JsonSerializable
     /**
      * @return ArrayCollection
      */
-    public function getCategoryCollection(): ArrayCollection
+    public function getCategoryCollection()
     {
         return $this->categoryCollection;
     }
