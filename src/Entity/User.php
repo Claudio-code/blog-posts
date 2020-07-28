@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -47,10 +48,15 @@ class User
     private $updated_at;
 
     /**
-     * @var array
+     * @var ArrayCollection
      * @ORM\ManyToOne(targetEntity="App\Entity\Post")
      */
     private $posts;
+
+    public function __construct()
+    {
+        $this->posts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -115,5 +121,21 @@ class User
         $this->updated_at = $updated_at;
 
         return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getPosts(): ArrayCollection
+    {
+        return $this->posts;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return "{$this->getFirstName()} {$this->getLastName()}";
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use JsonSerializable;
 use App\Repository\PostRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -55,44 +56,86 @@ class Post implements JsonSerializable
      */
     private $author;
 
-    public function getId(): ?int
+    /**
+     * @var ArrayCollection
+     * @ORM\ManyToMany(targetEntity="App\Entity\Category", inversedBy="postCollections")
+     */
+    private $categoryCollection;
+
+    public function __construct()
+    {
+        $this->categoryCollection = new ArrayCollection();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
     {
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    /**
+     * @param mixed $id
+     * @return Post
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTitle()
     {
         return $this->title;
     }
 
-    public function setTitle(string $title): self
+    /**
+     * @param mixed $title
+     * @return Post
+     */
+    public function setTitle($title)
     {
         $this->title = $title;
-
         return $this;
     }
 
-    public function getDescription(): ?string
+    /**
+     * @return mixed
+     */
+    public function getDescription()
     {
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    /**
+     * @param mixed $description
+     * @return Post
+     */
+    public function setDescription($description)
     {
         $this->description = $description;
-
         return $this;
     }
 
-    public function getSlug(): ?string
+    /**
+     * @return mixed
+     */
+    public function getSlug()
     {
         return $this->slug;
     }
 
-    public function setSlug(string $slug): self
+    /**
+     * @param mixed $slug
+     * @return Post
+     */
+    public function setSlug($slug)
     {
         $this->slug = $slug;
-
         return $this;
     }
 
@@ -106,33 +149,83 @@ class Post implements JsonSerializable
 
     /**
      * @param mixed $content
+     * @return Post
      */
-    public function setContent($content): void
+    public function setContent($content)
     {
         $this->content = $content;
+        return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    /**
+     * @return mixed
+     */
+    public function getCreatedAt()
     {
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeInterface $created_at): self
+    /**
+     * @param mixed $created_at
+     * @return Post
+     */
+    public function setCreatedAt($created_at)
     {
         $this->created_at = $created_at;
-
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    /**
+     * @return mixed
+     */
+    public function getUpdatedAt()
     {
         return $this->updated_at;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updated_at): self
+    /**
+     * @param mixed $updated_at
+     * @return Post
+     */
+    public function setUpdatedAt($updated_at)
     {
         $this->updated_at = $updated_at;
+        return $this;
+    }
 
+    /**
+     * @return User
+     */
+    public function getAuthor(): User
+    {
+        return $this->author;
+    }
+
+    /**
+     * @param User $author
+     * @return Post
+     */
+    public function setAuthor(User $author): Post
+    {
+        $this->author = $author;
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCategoryCollection(): ArrayCollection
+    {
+        return $this->categoryCollection;
+    }
+
+    /**
+     * @param ArrayCollection $categoryCollection
+     * @return Post
+     */
+    public function setCategoryCollection(ArrayCollection $categoryCollection): Post
+    {
+        $this->categoryCollection = $categoryCollection;
         return $this;
     }
 

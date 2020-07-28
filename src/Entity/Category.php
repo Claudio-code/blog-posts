@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CategoryRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -11,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Category
 {
     /**
+     * @var int
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -18,92 +20,169 @@ class Category
     private $id;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
+     * @var string
      * @ORM\Column(type="text")
      */
     private $description;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=255)
      */
     private $slug;
 
     /**
+     * @var \DateTime
      * @ORM\Column(type="datetime")
      */
     private $created_at;
 
     /**
+     * @var \DateTime
      * @ORM\Column(type="datetime")
      */
     private $updated_at;
 
-    public function getId(): ?int
+    /**
+     * @var ArrayCollection
+     * @ORM\ManyToMany(targetEntity="App\Entity\Post", mappedBy="CategoryCollection")
+     */
+    private $postCollections;
+
+    public function __construct()
+    {
+        $this->postCollections = new ArrayCollection();
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    /**
+     * @param int $id
+     * @return Category
+     */
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return Category
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
-
         return $this;
     }
 
-    public function getDescription(): ?string
+    /**
+     * @return string
+     */
+    public function getDescription(): string
     {
         return $this->description;
     }
 
+    /**
+     * @param string $description
+     * @return Category
+     */
     public function setDescription(string $description): self
     {
         $this->description = $description;
-
         return $this;
     }
 
-    public function getSlug(): ?string
+    /**
+     * @return string
+     */
+    public function getSlug(): string
     {
         return $this->slug;
     }
 
+    /**
+     * @param string $slug
+     * @return Category
+     */
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
-
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt(): \DateTime
     {
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeInterface $created_at): self
+    /**
+     * @param \DateTime $created_at
+     * @return Category
+     */
+    public function setCreatedAt(\DateTime $created_at): self
     {
         $this->created_at = $created_at;
-
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt(): \DateTime
     {
         return $this->updated_at;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updated_at): self
+    /**
+     * @param \DateTime $updated_at
+     * @return Category
+     */
+    public function setUpdatedAt(\DateTime $updated_at): self
     {
         $this->updated_at = $updated_at;
+        return $this;
+    }
 
+    /**
+     * @return ArrayCollection
+     */
+    public function getPostCollections(): ArrayCollection
+    {
+        return $this->postCollections;
+    }
+
+    /**
+     * @param ArrayCollection $postCollections
+     * @return Category
+     */
+    public function setPostCollections(ArrayCollection $postCollections): Category
+    {
+        $this->postCollections = $postCollections;
         return $this;
     }
 }
