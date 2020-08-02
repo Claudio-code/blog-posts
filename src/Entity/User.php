@@ -5,11 +5,12 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  */
-class User
+class User implements UserInterface
 {
     /**
      * @var int
@@ -35,6 +36,12 @@ class User
      * @var string
      * @ORM\Column(type="string", length=255)
      */
+    private $password;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=255)
+     */
     private $email;
 
     /**
@@ -49,9 +56,17 @@ class User
 
     /**
      * @var ArrayCollection
-     * @ORM\ManyToOne(targetEntity="App\Entity\Post")
+     * @ORM\OneToMany(targetEntity="App\Entity\Post", mappedBy="author")
+     * @ORM\JoinColumns({
+     *     @ORM\JoinColumn(name="id", referencedColumnName="author_id")
+     * })
      */
     private $posts;
+
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $roles;
 
     public function __construct()
     {
@@ -126,9 +141,29 @@ class User
     /**
      * @return ArrayCollection
      */
-    public function getPosts(): ArrayCollection
+    public function getPosts()
     {
         return $this->posts;
+    }
+
+    /**
+     * @param string $password
+     * @return User
+     */
+    public function setPassword(string $password): User
+    {
+        $this->password = $password;
+        return $this;
+    }
+
+    /**
+     * @param mixed $roles
+     * @return User
+     */
+    public function setRoles($roles)
+    {
+        $this->roles = $roles;
+        return $this;
     }
 
     /**
@@ -137,5 +172,36 @@ class User
     public function __toString(): string
     {
         return "{$this->getFirstName()} {$this->getLastName()}";
+    }
+
+    /**
+     * @return false|string[]
+     */
+    public function getRoles()
+    {
+        return explode(', ', $this->roles);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->email;
+    }
+
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
     }
 }
