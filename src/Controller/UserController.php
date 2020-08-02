@@ -9,9 +9,10 @@ use \Symfony\Component\HttpFoundation\Request;
 use \Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
- * @Route("/user", name="user")
+ * @Route("/admin/user", name="user")
  */
 class UserController extends AbstractController
 {
@@ -72,13 +73,18 @@ class UserController extends AbstractController
      * @return Response
      * @Route("/create", name="_create", methods={"GET", "POST"})
      */
-    public function create(Request $request): Response
+    public function create(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         $form = $this->createForm(UserType::class, new User());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
+
+            $password = $passwordEncoder->encodePassword($user, $user->getPassword());
+            $user->setPassword($password);
+            $user->setRoles("ROLE_ADMIN");
+
             $user
                 ->setCreatedAt(new \DateTime("now", new \DateTimeZone("America/Sao_Paulo")))
                 ->setUpdatedAt(new \DateTime("now", new \DateTimeZone("America/Sao_Paulo")))
