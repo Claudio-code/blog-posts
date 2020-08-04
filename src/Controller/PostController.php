@@ -7,8 +7,8 @@ use App\Form\PostType;
 use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use \Symfony\Component\HttpFoundation\Response;
-use \Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route("/admin/post", name="post")
@@ -16,13 +16,21 @@ use \Symfony\Component\HttpFoundation\Request;
 class PostController extends AbstractController
 {
     /**
+     * @param PostRepository $postRepository
      * @return Response
      * @Route("/", name="_index", methods={"GET"})
      */
     public function index(PostRepository $postRepository): Response
     {
+        if ($this->isGranted("ROLE_AUTHOR")) {
+            $posts = $this->getUser()->getPosts();
+        }
+
+        if ($this->isGranted("ROLE_ADMIN")) {
+            $posts = $postRepository->findAll();
+        }
         return $this->render("post/index.html.twig", [
-            "posts" => $postRepository->findAll()
+            "posts" => $posts
         ]);
     }
 

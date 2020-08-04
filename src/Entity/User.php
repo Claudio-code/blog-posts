@@ -64,6 +64,7 @@ class User implements UserInterface
     private $posts;
 
     /**
+     * @var array
      * @ORM\Column(type="json")
      */
     private $roles;
@@ -162,7 +163,7 @@ class User implements UserInterface
      */
     public function setRoles($roles)
     {
-        $this->roles = $roles;
+        $this->roles = $roles[0];
         return $this;
     }
 
