@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Post;
 use App\Repository\PostRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use \Symfony\Component\Routing\Annotation\Route;
 use \Symfony\Component\HttpFoundation\Response;
+use \Symfony\Component\HttpFoundation\Request;
 use \Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
@@ -17,12 +19,17 @@ use \Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class DefaultController extends AbstractController
 {
     /**
+     * @param Request $request
+     * @param PaginatorInterface $paginator
+     * @param PostRepository $postRepository
      * @return Response
      * @Route("/", name="default_index", methods={"GET"})
      */
-    public function index(PostRepository $postRepository): Response
+    public function index(Request $request, PaginatorInterface $paginator, PostRepository $postRepository): Response
     {
-        $posts = $postRepository->findAll();
+        $page = $request->query->getInt('page', 1);
+        $allPosts = $postRepository->findAll();
+        $posts = $paginator->paginate($allPosts, $page, 2);
 
         return $this->render("index.html.twig", [
             "title" => "Home page",
@@ -31,8 +38,9 @@ class DefaultController extends AbstractController
     }
 
     /**
+     * @param Post $post
      * @return Response
-     * @Route("/{id}", name="single_post", methods={"GET"})
+     * @Route("/{id}", name="single_post", methods={"GET"}, requirements={"id"="\d+"})
      */
     public function single(Post $post): Response
     {
