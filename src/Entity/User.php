@@ -163,7 +163,13 @@ class User implements UserInterface
      */
     public function setRoles($roles)
     {
-        $this->roles = $roles[0];
+        if (is_array($roles)) {
+            $this->roles = implode(',', $roles);
+        }
+        if (is_string($roles)) {
+            $this->roles = $roles;
+        }
+
         return $this;
     }
 

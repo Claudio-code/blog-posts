@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <h1>{{ post.title }}</h1>
+                </div>
+                <div class="row">
+                    <small>Criado em {{ post.createdAt|date("d/m/y") }}</small>
+                </div>
+            </div>
+            <div class="row">
+                <p>
+                    {{ post.content|raw }}
+                </p>
+            </div>
+            <div class="row">
+                <p>
+                    {{ post.description|raw }}
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block title %}
+    Sitema de blog
+{% endblock %}
+

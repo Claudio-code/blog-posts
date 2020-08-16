@@ -1,16 +1,44 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    {% if title is defined %}
-        <h1>{{ title }}</h1>
-    {% endif %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <h1>Postagens</h1>
+                    <hr>
+                </div>
+            </div>
+            <div class="row">
+                {% for post in posts %}
+                    <div class="col-12">
+                        <img
+                                src="https://placeimg.com/640/200/any"
+                                alt="Imagem Post: {{ post.title }}"
+                                class="img-fluid"
+                        >
+                        <h2>{{ post.title }}</h2>
+                        <small>Criado em {{ post.createdAt|date("d/m/y H:i:s") }}</small>
+                        <p>
+                            {{ post.description }}
+                        </p>
+                        <a
+                                href="{{ path('home_single_post', { 'id': post.id }) }}"
+                                class="btn btn-primary mb-3"
+                        >
+                            mostrar detalhes
+                        </a>
+                    </div>
+                    <hr>
+                {% endfor %}
+            </div>
+            <div class="col-4">
 
-    {% for post in posts %}
-        <li>
-            {{ post.id }} -
-            {{ post.title }} -
-            {{ post.create_at|date("d/m/y H:i:s") }}
-        </li>
-    {% endfor %}
+            </div>
+        </div>
+    </div>
+    <ul>
+
+    </ul>
 {% endblock %}
 
 {% block title %}
