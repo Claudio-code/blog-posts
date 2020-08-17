@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Service\MailerService;
 use \Symfony\Component\HttpFoundation\Request;
 use \Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,6 +18,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UserController extends AbstractController
 {
     /**
+     * @param UserRepository $repository
      * @return Response
      * @Route("/", name="_index", methods={"GET", "POST"})
      */
@@ -28,6 +30,7 @@ class UserController extends AbstractController
     }
 
     /**
+     * @param User $user
      * @return Response
      * @Route("/remove/{id}", name="_remove", methods={"GET", "POST"})
      */
@@ -42,7 +45,10 @@ class UserController extends AbstractController
     }
 
     /**
+     * @param Request $request
+     * @param User $user
      * @return Response
+     * @throws \Exception
      * @Route("/edit/{id}", name="_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, User $user): Response
@@ -70,16 +76,31 @@ class UserController extends AbstractController
     }
 
     /**
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param MailerService $mailerService
      * @return Response
+     * @throws \Exception
      * @Route("/create", name="_create", methods={"GET", "POST"})
      */
-    public function create(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function create(Request $request, UserPasswordEncoderInterface $passwordEncoder, MailerService $mailerService): Response
     {
         $form = $this->createForm(UserType::class, new User());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
+
+            // dados para enviar o email
+            $data = [
+                'subject' => 'Blog post usario criado com sucesso',
+                'email' => $user->getEmail(),
+            ];
+            $view = $this->renderView('email/newUser.html.twig', [
+                'name' => $user->getFirstName(),
+                'email' => $user->getEmail(),
+                'password' => $user->getPassword()
+            ]);
 
             $password = $passwordEncoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
@@ -93,9 +114,10 @@ class UserController extends AbstractController
             $manager = $this->getDoctrine()->getManager();
             $manager->persist($user);
             $manager->flush();
-            $this->addFlash("success", "criado novo usuario");
 
-            return  $this->redirectToRoute("user_index");
+            $mailerService->execute($view, $data);
+            $this->addFlash("success", "criado novo usuario");
+            return $this->redirectToRoute("user_index");
         }
 
         return $this->render("user/index.html.twig", [
