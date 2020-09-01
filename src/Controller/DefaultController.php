@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Coment;
 use App\Entity\Post;
+use App\Form\CommentType;
 use App\Repository\PostRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use \Symfony\Component\Routing\Annotation\Route;
@@ -44,8 +46,11 @@ class DefaultController extends AbstractController
      */
     public function single(Post $post): Response
     {
+        $form = $this->createForm(CommentType::class, new Coment());
+
         return $this->render("single.html.twig", [
-            "post" => $post
+            "post" => $post,
+            "form" => $form->createView()
         ]);
     }
 }

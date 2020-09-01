@@ -22,10 +22,7 @@ class PostController extends AbstractController
      */
     public function index(PostRepository $postRepository): Response
     {
-        if ($this->isGranted("ROLE_AUTHOR")) {
-            $posts = $this->getUser()->getPosts();
-        }
-
+        $posts = $this->getUser()->getPosts();
         if ($this->isGranted("ROLE_ADMIN")) {
             $posts = $postRepository->findAll();
         }
@@ -49,7 +46,10 @@ class PostController extends AbstractController
     }
 
     /**
+     * @param Request $request
+     * @param Post $post
      * @return Response
+     * @throws \Exception
      * @Route("/edit/{id}", name="_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Post $post)
@@ -76,7 +76,9 @@ class PostController extends AbstractController
     }
 
     /**
+     * @param Request $request
      * @return Response
+     * @throws \Exception
      * @Route("/create", name="_create", methods={"GET", "POST"})
      */
     public function create(Request $request): Response

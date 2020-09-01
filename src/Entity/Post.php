@@ -8,7 +8,7 @@ use App\Repository\PostRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=PostRepository::class)
+ * @ORM\Entity(repositoryClass="App\Repository\PostRepository", repositoryClass=PostRepository::class)
  * @ORM\Table(name="posts")
  */
 class Post implements JsonSerializable
@@ -18,43 +18,43 @@ class Post implements JsonSerializable
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $title;
+    private string $title;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $description;
+    private string $description;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $slug;
+    private string $slug;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $content;
+    private string $content;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $created_at;
+    private \DateTime $created_at;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $updated_at;
+    private \DateTime $updated_at;
 
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      */
-    private $author;
+    private User $author;
 
     /**
      * @var ArrayCollection
@@ -62,9 +62,16 @@ class Post implements JsonSerializable
      */
     private $categoryCollection;
 
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="Coment", mappedBy="post")
+     */
+    private $commentsCollection;
+
     public function __construct()
     {
         $this->categoryCollection = new ArrayCollection();
+        $this->commentsCollection = new ArrayCollection();
     }
 
     /**
@@ -79,7 +86,7 @@ class Post implements JsonSerializable
      * @param mixed $id
      * @return Post
      */
-    public function setId($id)
+    public function setId($id): self
     {
         $this->id = $id;
         return $this;
@@ -88,7 +95,7 @@ class Post implements JsonSerializable
     /**
      * @return mixed
      */
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
@@ -97,7 +104,7 @@ class Post implements JsonSerializable
      * @param mixed $title
      * @return Post
      */
-    public function setTitle($title)
+    public function setTitle($title): self
     {
         $this->title = $title;
         return $this;
@@ -106,7 +113,7 @@ class Post implements JsonSerializable
     /**
      * @return mixed
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -115,7 +122,7 @@ class Post implements JsonSerializable
      * @param mixed $description
      * @return Post
      */
-    public function setDescription($description)
+    public function setDescription($description): self
     {
         $this->description = $description;
         return $this;
@@ -124,7 +131,7 @@ class Post implements JsonSerializable
     /**
      * @return mixed
      */
-    public function getSlug()
+    public function getSlug(): ?string
     {
         return $this->slug;
     }
@@ -133,7 +140,7 @@ class Post implements JsonSerializable
      * @param mixed $slug
      * @return Post
      */
-    public function setSlug($slug)
+    public function setSlug($slug): self
     {
         $this->slug = $slug;
         return $this;
@@ -142,7 +149,7 @@ class Post implements JsonSerializable
     /**
      * @return mixed
      */
-    public function getContent()
+    public function getContent(): ?string
     {
         return $this->content;
     }
@@ -160,7 +167,7 @@ class Post implements JsonSerializable
     /**
      * @return mixed
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->created_at;
     }
@@ -169,7 +176,7 @@ class Post implements JsonSerializable
      * @param mixed $created_at
      * @return Post
      */
-    public function setCreatedAt($created_at)
+    public function setCreatedAt($created_at): self
     {
         $this->created_at = $created_at;
         return $this;
@@ -178,7 +185,7 @@ class Post implements JsonSerializable
     /**
      * @return mixed
      */
-    public function getUpdatedAt()
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updated_at;
     }
@@ -187,7 +194,7 @@ class Post implements JsonSerializable
      * @param mixed $updated_at
      * @return Post
      */
-    public function setUpdatedAt($updated_at)
+    public function setUpdatedAt($updated_at): self
     {
         $this->updated_at = $updated_at;
         return $this;
@@ -214,7 +221,7 @@ class Post implements JsonSerializable
     /**
      * @return ArrayCollection
      */
-    public function getCategoryCollection()
+    public function getCategoryCollection(): ?ArrayCollection
     {
         return $this->categoryCollection;
     }
@@ -227,6 +234,22 @@ class Post implements JsonSerializable
     {
         $this->categoryCollection = $categoryCollection;
         return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCommentsCollection(): ?ArrayCollection
+    {
+        return $this->commentsCollection;
+    }
+
+    /**
+     * @param ArrayCollection $commentsCollection
+     */
+    public function setCommentsCollection(ArrayCollection $commentsCollection): void
+    {
+        $this->commentsCollection = $commentsCollection;
     }
 
     public function jsonSerialize(): array

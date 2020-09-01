@@ -17,37 +17,37 @@ class Category
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @var string
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private string $name;
 
     /**
      * @var string
      * @ORM\Column(type="text")
      */
-    private $description;
+    private string $description;
 
     /**
      * @var string
      * @ORM\Column(type="string", length=255)
      */
-    private $slug;
+    private string $slug;
 
     /**
      * @var \DateTime
      * @ORM\Column(type="datetime")
      */
-    private $created_at;
+    private \DateTime $created_at;
 
     /**
      * @var \DateTime
      * @ORM\Column(type="datetime")
      */
-    private $updated_at;
+    private \DateTime $updated_at;
 
     /**
      * @var ArrayCollection
