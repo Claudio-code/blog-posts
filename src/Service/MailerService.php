@@ -17,6 +17,7 @@ class MailerService
     /**
      * @param array $data
      * @param $view
+     * @return int
      */
     public function execute($view, array $data = []): int
     {

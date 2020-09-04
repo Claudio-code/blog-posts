@@ -26,8 +26,11 @@
                     <hr>
                 </div>
                 <div class="col-12">
-                    {{ form_start(form) }}
+                    <h3>Comentar</h3>
+                    <hr>
+                    {{ form_start(form, {attr: {action: path('comment_save', {id : post.id }), novalidate: 'novalidate'}}) }}
                         {{ form_widget(form) }}
+                        <button type="submit" class="btn btn-sm btn-success"> enviar</button>
                     {{ form_end(form) }}
                 </div>
             </div>
